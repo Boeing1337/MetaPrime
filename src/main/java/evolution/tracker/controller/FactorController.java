@@ -22,6 +22,11 @@ public class FactorController {
         return factorService.getAll();
     }
 
+    @GetMapping(params = "type")
+    public Mono<Factor> getByType(@RequestParam String type) {
+        return factorService.getByType(type);
+    }
+
     @GetMapping(params = "id")
     public Mono<Factor> getById(@RequestParam Long id) {
         return factorService.getById(id);

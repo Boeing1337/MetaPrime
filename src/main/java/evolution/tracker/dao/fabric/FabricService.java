@@ -20,7 +20,11 @@ public class FabricService {
     }
 
     public Mono<Fabric> getByCode(Long code) {
-        return fabricRepo.findById(code);
+        return fabricRepo.findByCode(code);
+    }
+
+    public Mono<Fabric> getById(Long id) {
+        return fabricRepo.findById(id);
     }
 
 //    public Mono<Boolean> update(Position position) {

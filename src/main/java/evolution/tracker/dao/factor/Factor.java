@@ -9,6 +9,6 @@ public class Factor {
     @Id
     private Long id;
     private String type;
-    private String salaryBonus;
-    private String vacationBonus;
+    private Long salaryBonus;
+    private Long vacationBonus;
 }

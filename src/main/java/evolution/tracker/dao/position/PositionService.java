@@ -8,31 +8,41 @@ import reactor.core.publisher.Mono;
 @Component
 public class PositionService {
 
-    private final PositionRepo positionRepo;
+    private final PositionRepo repository;
 
     @Autowired
-    public PositionService(PositionRepo positionRepo) {
-        this.positionRepo = positionRepo;
+    public PositionService(final PositionRepo positionRepo) {
+        this.repository = positionRepo;
     }
 
     public Flux<Position> getAll() {
-        return positionRepo.findAll();
+        return repository.findAll();
     }
 
-    public Mono<Position> getByCode(Long code) {
-        return positionRepo.findById(code);
+    public Mono<Position> getByCode(final Long code) {
+        return repository.findByCode(code);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
-
-    public Mono<Position> addOne(Position position) {
-        return positionRepo.save(position);
+    public Mono<Position> getById(final Long id) {
+        return repository.findById(id);
     }
 
-    public Mono<Void> delete(Position position) {
-        return positionRepo.delete(position);
+    public Mono<Position> update(final Position position) {
+        return repository
+                .findById(position.getCode())
+                .doOnSubscribe(System.out::println); //TO DO: delete it!
+    }
+
+    public Mono<Position> addOne(final Position position) {
+        return repository.save(position);
+    }
+
+    public Mono<Void> delete(final Position position) {
+        return repository.delete(position);
+    }
+
+    public Mono<Void> deleteBy(final Long code) {
+        return repository.deleteById(code);
     }
 
 }

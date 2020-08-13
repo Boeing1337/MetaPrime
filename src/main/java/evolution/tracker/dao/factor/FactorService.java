@@ -19,6 +19,10 @@ public class FactorService {
         return factorRepo.findAll();
     }
 
+    public Mono<Factor> getByType(String id) {
+        return factorRepo.findByType(id);
+    }
+
     public Mono<Factor> getById(Long id) {
         return factorRepo.findById(id);
     }

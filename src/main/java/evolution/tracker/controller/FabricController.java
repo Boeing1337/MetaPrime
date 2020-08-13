@@ -3,7 +3,6 @@ package evolution.tracker.controller;
 import evolution.tracker.dao.fabric.Fabric;
 import evolution.tracker.dao.fabric.FabricService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,6 +25,11 @@ public class FabricController {
     @GetMapping(params = "code")
     public Mono<Fabric> getByCode(@RequestParam Long code) {
         return fabricService.getByCode(code);
+    }
+
+    @GetMapping(params = "id")
+    public Mono<Fabric> getById(@RequestParam Long id) {
+        return fabricService.getById(id);
     }
 
 //    public Mono<Boolean> update(Position position) {

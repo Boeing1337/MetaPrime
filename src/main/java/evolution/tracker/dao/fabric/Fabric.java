@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 @NoArgsConstructor
 public class Fabric {
     @Id
+    private Long id;
     private Long code;
     private String type;
 }

@@ -6,8 +6,9 @@ import org.springframework.data.annotation.Id;
 @Data
 public class Position {
     @Id
+    private Long id;
     private Long code;
     private String type;
-    private Long factor;
+    private String factor;
     private Long salary;
 }

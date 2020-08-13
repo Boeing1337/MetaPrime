@@ -11,34 +11,45 @@ import reactor.core.publisher.Mono;
 @RequestMapping("position")
 public class PositionController {
 
-    private final PositionService positionService;
+    private final PositionService service;
 
     @Autowired
-    public PositionController(PositionService positionService) {
-        this.positionService = positionService;
+    public PositionController(final PositionService positionService) {
+        this.service = positionService;
     }
 
     @GetMapping("all")
     public Flux<Position> getAll() {
-        return positionService.getAll();
+        return service.getAll();
     }
 
     @GetMapping(params = "code")
-    public Mono<Position> getByCode(@RequestParam Long code) {
-        return positionService.getByCode(code);
+    public Mono<Position> getByCode(@RequestParam final Long code) {
+        return service.getByCode(code);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
+    @GetMapping(params = "id")
+    public Mono<Position> getById(@RequestParam final Long id) {
+        return service.getById(id);
+    }
+
+    @PutMapping
+    public Mono<Position> update(@RequestBody final Position position) {
+        return service.update(position);
+    }
 
     @PostMapping
-    public Mono<Position> addOne(@RequestBody Position position) {
-        return positionService.addOne(position);
+    public Mono<Position> addOne(@RequestBody final Position position) {
+        return service.addOne(position);
     }
 
     @DeleteMapping
-    public Mono<Void> delete(@RequestBody Position position) {
-        return positionService.delete(position);
+    public Mono<Void> delete(@RequestBody final Position position) {
+        return service.delete(position);
+    }
+
+    @DeleteMapping(params = "code")
+    public Mono<Void> deleteBy(@RequestParam final Long code) {
+        return service.deleteBy(code);
     }
 }
