@@ -19,13 +19,18 @@ public class PersonController {
     }
 
     @GetMapping("all")
-    public Flux<Person> list() {
+    public Flux<Person> getAll() {
         return personService.getAll();
     }
 
     @PostMapping
     public Mono<Person> addOne(@RequestBody Person person) {
         return personService.addOne(person);
+    }
+
+    @PostMapping
+    public Mono<Person> update(@RequestBody Person person) {
+        return personService.update(person);
     }
 
     @GetMapping
@@ -44,12 +49,9 @@ public class PersonController {
         return personService.getBy(firstName, lastName);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
 
-    @DeleteMapping
-    public Mono<Void> delete(@RequestBody Person person) {
-        return personService.delete(person);
+    @DeleteMapping(params = "id")
+    public Mono<Void> delete(@RequestParam Long id) {
+        return personService.delete(id);
     }
 }

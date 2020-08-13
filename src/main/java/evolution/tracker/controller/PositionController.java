@@ -33,19 +33,19 @@ public class PositionController {
         return service.getById(id);
     }
 
-    @PutMapping
+    @PostMapping
     public Mono<Position> update(@RequestBody final Position position) {
         return service.update(position);
     }
 
-    @PostMapping
+    @PutMapping
     public Mono<Position> addOne(@RequestBody final Position position) {
         return service.addOne(position);
     }
 
-    @DeleteMapping
-    public Mono<Void> delete(@RequestBody final Position position) {
-        return service.delete(position);
+    @DeleteMapping(params = "id")
+    public Mono<Void> delete(@RequestParam final Long id) {
+        return service.delete(id);
     }
 
     @DeleteMapping(params = "code")

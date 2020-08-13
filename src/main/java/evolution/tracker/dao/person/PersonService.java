@@ -30,16 +30,21 @@ public class PersonService {
         return personRepo.findAllByFirstNameAndLastName(firstName, lastName);
     }
 
-
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
-
-    public Mono<Person> addOne(Person person) {
+    public Mono<Person> update(Person person) {
+        if (person.getId() == null) {
+            throw new IllegalArgumentException("Updated entity must to contain id");
+        }
         return personRepo.save(person);
     }
 
-    public Mono<Void> delete(Person person) {
-        return personRepo.delete(person);
+    public Mono<Person> addOne(Person person) {
+        if (person.getId() != null) {
+            throw new IllegalArgumentException("New entity shouldn't contain id");
+        }
+        return personRepo.save(person);
+    }
+
+    public Mono<Void> delete(Long id) {
+        return personRepo.deleteById(id);
     }
 }

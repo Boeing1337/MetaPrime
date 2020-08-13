@@ -8,34 +8,44 @@ import reactor.core.publisher.Mono;
 @Service
 public class FabricService {
 
-    private final FabricRepo fabricRepo;
+    private final FabricRepo repository;
 
     @Autowired
-    public FabricService(FabricRepo fabricRepo) {
-        this.fabricRepo = fabricRepo;
+    public FabricService(final FabricRepo fabricRepo) {
+        this.repository = fabricRepo;
     }
 
     public Flux<Fabric> getAll() {
-        return fabricRepo.findAll();
+        return repository.findAll();
     }
 
-    public Mono<Fabric> getByCode(Long code) {
-        return fabricRepo.findByCode(code);
+    public Mono<Fabric> getByCode(final Long code) {
+        return repository.findByCode(code);
     }
 
-    public Mono<Fabric> getById(Long id) {
-        return fabricRepo.findById(id);
+    public Mono<Fabric> getById(final Long id) {
+        return repository.findById(id);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
-
-    public Mono<Fabric> addOne(Fabric fabric) {
-        return fabricRepo.save(fabric);
+    public Mono<Fabric> update(final Fabric fabric) {
+        if (fabric.getId() == null) {
+            throw new IllegalArgumentException("Updated entity must to contain id");
+        }
+        return repository.save(fabric);
     }
 
-    public Mono<Void> delete(Fabric fabric) {
-        return fabricRepo.delete(fabric);
+    public Mono<Fabric> addOne(final Fabric fabric) {
+        if (fabric.getId() != null) {
+            throw new IllegalArgumentException("New entity shouldn't contain id");
+        }
+        return repository.save(fabric);
+    }
+
+    public Mono<Void> delete(final Long id) {
+        return repository.deleteById(id);
+    }
+
+    public Mono<Fabric> deleteBy(final String type) {
+        return repository.deleteByType(type);
     }
 }

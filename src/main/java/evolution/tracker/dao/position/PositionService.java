@@ -28,17 +28,21 @@ public class PositionService {
     }
 
     public Mono<Position> update(final Position position) {
-        return repository
-                .findById(position.getCode())
-                .doOnSubscribe(System.out::println); //TO DO: delete it!
-    }
-
-    public Mono<Position> addOne(final Position position) {
+        if (position.getId() == null) {
+            throw new IllegalArgumentException("Updated entity must to contain id");
+        }
         return repository.save(position);
     }
 
-    public Mono<Void> delete(final Position position) {
-        return repository.delete(position);
+    public Mono<Position> addOne(final Position position) {
+        if (position.getId() != null) {
+            throw new IllegalArgumentException("New entity shouldn't contain id");
+        }
+        return repository.save(position);
+    }
+
+    public Mono<Void> delete(final Long id) {
+        return repository.deleteById(id);
     }
 
     public Mono<Void> deleteBy(final Long code) {

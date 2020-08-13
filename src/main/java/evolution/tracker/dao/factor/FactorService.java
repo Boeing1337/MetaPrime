@@ -27,15 +27,21 @@ public class FactorService {
         return factorRepo.findById(id);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
-
-    public Mono<Factor> addOne(Factor factor) {
+    public Mono<Factor> update(Factor factor) {
+        if (factor.getId() == null) {
+            throw new IllegalArgumentException("Updated entity must to contain id");
+        }
         return factorRepo.save(factor);
     }
 
-    public Mono<Void> delete(Factor factor) {
-        return factorRepo.delete(factor);
+    public Mono<Factor> addOne(Factor factor) {
+        if (factor.getId() != null) {
+            throw new IllegalArgumentException("New entity shouldn't contain id");
+        }
+        return factorRepo.save(factor);
+    }
+
+    public Mono<Void> delete(Long id) {
+        return factorRepo.deleteById(id);
     }
 }

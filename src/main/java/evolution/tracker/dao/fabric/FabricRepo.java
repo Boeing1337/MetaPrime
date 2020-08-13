@@ -5,4 +5,6 @@ import reactor.core.publisher.Mono;
 
 public interface FabricRepo extends ReactiveCrudRepository<Fabric, Long> {
     Mono<Fabric> findByCode(Long code);
+
+    Mono<Fabric> deleteByType(String type);
 }

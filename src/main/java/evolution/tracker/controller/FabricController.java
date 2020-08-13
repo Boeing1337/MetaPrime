@@ -10,39 +10,45 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("fabric")
 public class FabricController {
-    private final FabricService fabricService;
+    private final FabricService service;
 
     @Autowired
-    public FabricController(FabricService fabricService) {
-        this.fabricService = fabricService;
+    public FabricController(final FabricService fabricService) {
+        this.service = fabricService;
     }
 
     @GetMapping("all")
     public Flux<Fabric> getAll() {
-        return fabricService.getAll();
+        return service.getAll();
     }
 
     @GetMapping(params = "code")
-    public Mono<Fabric> getByCode(@RequestParam Long code) {
-        return fabricService.getByCode(code);
+    public Mono<Fabric> getByCode(@RequestParam final Long code) {
+        return service.getByCode(code);
     }
 
     @GetMapping(params = "id")
-    public Mono<Fabric> getById(@RequestParam Long id) {
-        return fabricService.getById(id);
+    public Mono<Fabric> getById(@RequestParam final Long id) {
+        return service.getById(id);
     }
-
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
 
     @PostMapping
-    public Mono<Fabric> addOne(@RequestBody Fabric fabric) {
-        return fabricService.addOne(fabric);
+    public Mono<Fabric> update(@RequestBody final Fabric fabric) {
+        return service.update(fabric);
     }
 
-    @DeleteMapping
-    public Mono<Void> delete(@RequestBody Fabric fabric) {
-        return fabricService.delete(fabric);
+    @PutMapping
+    public Mono<Fabric> addOne(@RequestBody final Fabric fabric) {
+        return service.addOne(fabric);
+    }
+
+    @DeleteMapping(params = "id")
+    public Mono<Void> delete(@RequestBody final Long id) {
+        return service.delete(id);
+    }
+
+    @DeleteMapping(params = "type")
+    public Mono<Fabric> deleteBy(@RequestParam final String type) {
+        return service.deleteBy(type);
     }
 }

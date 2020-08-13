@@ -32,17 +32,19 @@ public class FactorController {
         return factorService.getById(id);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
-
     @PostMapping
-    public Mono<Factor> addOne(@RequestBody Factor factor) {
-        return factorService.addOne(factor);
+    public Mono<Factor> update(@RequestBody Factor factor) {
+        return factorService.update(factor);
     }
 
-    @DeleteMapping
-    public Mono<Void> delete(@RequestBody Factor factor) {
-        return factorService.delete(factor);
+    @PutMapping
+    public Mono<Factor> addOne(@RequestBody Factor factor) {
+        return factorService.addOne(factor);
+
+    }
+
+    @DeleteMapping(params = "id")
+    public Mono<Void> delete(@RequestParam Long id) {
+        return factorService.delete(id);
     }
 }

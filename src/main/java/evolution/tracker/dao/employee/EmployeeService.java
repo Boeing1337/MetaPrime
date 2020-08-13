@@ -8,38 +8,45 @@ import reactor.core.publisher.Mono;
 @Service
 public class EmployeeService {
 
-    private final EmployeeRepo employeeRepo;
+    private final EmployeeRepo repository;
 
     @Autowired
-    public EmployeeService(EmployeeRepo employeeRepo) {
-        this.employeeRepo = employeeRepo;
+    public EmployeeService(final EmployeeRepo employeeRepo) {
+        this.repository = employeeRepo;
     }
 
     public Flux<Employee> getAll() {
-        return employeeRepo.findAll();
+        return repository.findAll();
     }
 
     public Mono<Employee> getById(Long id) {
-        return employeeRepo.findById(id);
+        return repository.findById(id);
     }
 
-    public Flux<Employee> getAllByPositionCode(Long positionCode) {
-        return employeeRepo.findAllByPositionCode(positionCode);
+    public Flux<Employee> getAllByPositionCode(final Long positionCode) {
+        return repository.findAllByPositionCode(positionCode);
     }
 
-    public Flux<Employee> getAllByFabricCode(Long fabricCode) {
-        return employeeRepo.findAllByFabricCode(fabricCode);
+    public Flux<Employee> getAllByFabricCode(final Long fabricCode) {
+        return repository.findAllByFabricCode(fabricCode);
     }
 
-//    public Mono<Boolean> update(Position position) {
-//        return position.update(position);
-//    }
-
-    public Mono<Employee> addOne(Employee employee) {
-        return employeeRepo.save(employee);
+    public Mono<Employee> update(final Employee employee) {
+        if (employee.getId() == null) {
+            throw new IllegalArgumentException("Updated entity must to contain id");
+        }
+        return repository.save(employee);
     }
 
-    public Mono<Void> delete(Employee employee) {
-        return employeeRepo.delete(employee);
+    public Mono<Employee> addOne(final Employee employee) {
+        if (employee.getId() != null) {
+            throw new IllegalArgumentException("New entity shouldn't contain id");
+        }
+        return repository.save(employee);
     }
+
+    public Mono<Void> delete(final Long id) {
+        return repository.deleteById(id);
+    }
+
 }
