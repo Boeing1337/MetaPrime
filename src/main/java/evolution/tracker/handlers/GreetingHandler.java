@@ -10,9 +10,18 @@ import reactor.core.publisher.Mono;
 
 import java.util.Map;
 
+/**
+ * The type Greeting handler.
+ */
 @Component
 public class GreetingHandler {
-    public Mono<ServerResponse> hello(ServerRequest request) {
+    /**
+     * Hello mono.
+     *
+     * @param request the request
+     * @return the mono
+     */
+    public Mono<ServerResponse> hello(final ServerRequest request) {
         Long start = request.queryParam("start")
                 .map(Long::valueOf)
                 .orElse(0L);
@@ -34,7 +43,13 @@ public class GreetingHandler {
                 .body(data, Message.class);
     }
 
-    public Mono<ServerResponse> index(ServerRequest request) {
+    /**
+     * Index mono.
+     *
+     * @param request the request
+     * @return the mono
+     */
+    public Mono<ServerResponse> index(final ServerRequest request) {
         String user = request.queryParam("user")
                 .orElse("Nobody");
         return ServerResponse
