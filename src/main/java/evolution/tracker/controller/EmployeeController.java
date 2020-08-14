@@ -1,7 +1,10 @@
 package evolution.tracker.controller;
 
 import evolution.tracker.dao.employee.Employee;
+import evolution.tracker.dao.employee.EmployeeRepo;
 import evolution.tracker.dao.employee.EmployeeService;
+import evolution.tracker.dao.fabric.Fabric;
+import evolution.tracker.dao.position.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +18,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Reactive REST controller for 'Employee' table.
+ * Reactive REST controller for {@link EmployeeRepo} table.
  * All CRUD operations are supported.
  *
  * @author Dmitry Morozov
@@ -32,10 +35,9 @@ public class EmployeeController {
     private final EmployeeService service;
 
     /**
-     * Instantiates a new Employee controller.
+     * Instantiates a new {@link EmployeeController}.
      *
-     * @param employeeService DAO service bean for 'Employee' table.
-     * @see evolution.tracker.dao.employee.EmployeeRepo
+     * @param employeeService DAO service for {@link EmployeeRepo}.
      * @see EmployeeService
      */
     @Autowired
@@ -44,8 +46,10 @@ public class EmployeeController {
     }
 
     /**
-     * @return JSON representation of ALL employee from 'Employee' table
+     * Gets all {@link Employee} from {@link EmployeeRepo}.
      * All columns of the table will be included.
+     *
+     * @return {@link Flux} based on all found {@link Employee}
      */
     @GetMapping("all")
     public Flux<Employee> getAll() {
@@ -53,10 +57,12 @@ public class EmployeeController {
     }
 
     /**
-     * @param id is a primary INT type key of 'Employee' table.
-     * @return JSON representation of ONE employee from 'Employee' table
-     * by provided id.
+     * Gets one {@link Employee} from {@link EmployeeRepo} by provided id.
      * All columns of the table will be included.
+     *
+     * @param id is a primary INT type key of {@link EmployeeRepo} table.
+     * @return {@link Mono} based on a found {@link Employee}
+     * by provided id.
      */
     @GetMapping(params = "id")
     public Mono<Employee> getById(@RequestParam final Long id) {
@@ -64,13 +70,12 @@ public class EmployeeController {
     }
 
     /**
-     * @param positionCode foreign key to 'Position' table.
-     *                     It presented by INT type.
-     * @return JSON representation of ALL employee from 'Employee' table
-     * by provided positionCode.
+     * Gets {@link Employee} from {@link EmployeeRepo} by provided positionCode.
      * All columns of the table will be included.
-     * @see evolution.tracker.dao.position.Position foreing entity
-     * @see evolution.tracker.dao.fabric.FabricRepo target repository
+     *
+     * @param positionCode is a foreign key to {@link Position} table.
+     *                     It presented by INT type.
+     * @return {@link Flux} based on all found {@link Employee}
      */
     @GetMapping(params = "positionCode")
     public Flux<Employee> getAllByPositionCode(@RequestParam final
@@ -79,12 +84,12 @@ public class EmployeeController {
     }
 
     /**
-     * @param fabricCode foreign key to 'Fabric' table.
-     *                   It presented by INT type.
-     * @return JSON representation of ALL employee from 'Employee' table
-     * by provided fabricCode.
+     * Gets {@link Employee} from {@link EmployeeRepo} by provided fabricCode.
      * All columns of the table will be included.
-     * @see evolution.tracker.dao.fabric.FabricRepo target repository
+     *
+     * @param fabricCode is a foreign key to {@link Fabric} table.
+     *                   It presented by INT type.
+     * @return {@link Flux} based on all found {@link Employee}
      */
     @GetMapping(params = "fabricCode")
     public Flux<Employee> getAllByFabricCode(@RequestParam final
@@ -93,11 +98,14 @@ public class EmployeeController {
     }
 
     /**
-     * @param employee is a simple entity of 'Employee table'
-     *                 represented by JSON.
-     * @return an error or the updated entity
-     * @throws IllegalArgumentException <p>id field is required</p>
-     * @see evolution.tracker.dao.fabric.FabricRepo target repository
+     * Updates a {@link Employee} row in {@link EmployeeRepo} table.
+     * All columns will be updated
+     *
+     * @param employee is {@link Employee} entity to be updated
+     *                 it must contain @id of an existed entity in the table
+     *                 you want to update
+     * @return the updated {@link Mono} based on {@link Employee}
+     * @throws IllegalArgumentException id field of {@link Employee} is required
      */
     @PostMapping
     public Mono<Employee> update(@RequestBody final Employee employee) {
@@ -105,13 +113,13 @@ public class EmployeeController {
     }
 
     /**
-     * Puts a new entity of 'Employee' table.
+     * Add a new {@link Employee} row in {@link EmployeeRepo} table.
+     * All columns will be included
      *
-     * @param employee is a simple entity of 'Employee table'
-     *                 represented by JSON.
-     * @return an error or the added entity
-     * @throws IllegalArgumentException <p>id field must be null</p>
-     * @see evolution.tracker.dao.fabric.FabricRepo target repository
+     * @param employee is {@link Employee} entity to be added.
+     *                 the @id field must be null
+     * @return the updated {@link Mono} based on {@link Employee}
+     * @throws IllegalArgumentException the @id field must be null
      */
     @PutMapping
     public Mono<Employee> addOne(@RequestBody final Employee employee) {
@@ -119,11 +127,10 @@ public class EmployeeController {
     }
 
     /**
-     * Just deletes entity from 'Employee' table by provided id.
+     * Just deletes {@link Employee} from {@link EmployeeRepo} by provided id.
      *
-     * @param id is a primary INT type key of 'Employee' table.
-     * @return Mono<Void>
-     * @see evolution.tracker.dao.fabric.FabricRepo target repository
+     * @param id is a primary INT type key of {@link EmployeeRepo} table.
+     * @return {@link Mono<Void>}
      */
     @DeleteMapping(params = "id")
     public Mono<Void> delete(@RequestBody final Long id) {

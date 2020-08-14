@@ -1,12 +1,14 @@
 package evolution.tracker.dao.employee;
 
+import evolution.tracker.dao.fabric.FabricRepo;
+import evolution.tracker.dao.position.PositionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
- * Reactive DAO service to work with 'Employee' table.
+ * Reactive DAO service to work with {@link EmployeeRepo} table.
  * All CRUD operations are supported.
  *
  * @author Dmitry Morozov
@@ -17,16 +19,17 @@ import reactor.core.publisher.Mono;
 public class EmployeeService {
 
     /**
-     * Repository of 'Employee' table.
+     * Repository of {@link EmployeeRepo} table.
      *
-     * @see Employee
+     * @see Employee entity
      */
     private final EmployeeRepo repository;
 
     /**
-     * Instantiates a new Employee service.
+     * Instantiates a new this {@link EmployeeService}.
      *
-     * @param employeeRepo the 'Employee' repository
+     * @param employeeRepo is {@link EmployeeRepo} repository
+     * @see Employee entity
      */
     @Autowired
     public EmployeeService(final EmployeeRepo employeeRepo) {
@@ -34,76 +37,90 @@ public class EmployeeService {
     }
 
     /**
-     * Gets all Employee from 'Employee' table.
+     * Gets all {@link Employee} entities from {@link EmployeeRepo} table.
      * All columns will be included
      *
-     * @return the all
+     * @return {@link Flux} based on all {@link Employee} in the table
      */
     public Flux<Employee> getAll() {
         return repository.findAll();
     }
 
     /**
-     * Gets by id.
+     * Gets one {@link Employee} entity from {@link EmployeeRepo} table by id.
+     * All columns will be included
      *
-     * @param id the id
-     * @return the by id
+     * @param id is a primary INT type key of {@link EmployeeRepo} table.
+     * @return a {@link Mono} based on {@link Employee} entity
      */
-    public Mono<Employee> getById(Long id) {
+    public Mono<Employee> getById(final Long id) {
         return repository.findById(id);
     }
 
     /**
-     * Gets all by position code.
+     * Gets {@link Employee} entities from {@link EmployeeRepo} table by @param.
+     * All columns will be included
      *
-     * @param positionCode the position code
-     * @return the all by position code
+     * @param positionCode is a INT type foreign key.
+     *                     It represent a column from {@link PositionRepo}
+     * @return {@link Flux} based on {@link Employee}
      */
     public Flux<Employee> getAllByPositionCode(final Long positionCode) {
         return repository.findAllByPositionCode(positionCode);
     }
 
     /**
-     * Gets all by fabric code.
+     * Gets {@link Employee} entities from {@link EmployeeRepo} table by @param.
+     * All columns will be included
      *
-     * @param fabricCode the fabric code
-     * @return the all by fabric code
+     * @param fabricCode is a INT type foreign key.
+     *                   It represent a column from {@link FabricRepo}
+     * @return {@link Flux} based on {@link Employee}
      */
     public Flux<Employee> getAllByFabricCode(final Long fabricCode) {
         return repository.findAllByFabricCode(fabricCode);
     }
 
     /**
-     * Update mono.
+     * Updates a {@link Employee} row in {@link EmployeeRepo} table.
+     * All columns will be updated
      *
-     * @param employee the employee
-     * @return the mono
+     * @param employee is {@link Employee} entity to be updated
+     *                 it must contain @id of an existed entity in the table
+     *                 you want to update
+     * @return the updated {@link Mono} based on {@link Employee}
+     * @throws IllegalArgumentException id field of {@link Employee} is required
      */
     public Mono<Employee> update(final Employee employee) {
         if (employee.getId() == null) {
-            throw new IllegalArgumentException("Updated entity must to contain id");
+            throw new IllegalArgumentException(
+                    "Updated entity must to contain id");
         }
         return repository.save(employee);
     }
 
     /**
-     * Add one mono.
+     * Add a new {@link Employee} row in {@link EmployeeRepo} table.
+     * All columns will be included
      *
-     * @param employee the employee
-     * @return the mono
+     * @param employee is {@link Employee} entity to be added.
+     *                 the @id field must be null
+     * @return the updated {@link Mono} based on {@link Employee}
+     * @throws IllegalArgumentException the @id field must be null
      */
     public Mono<Employee> addOne(final Employee employee) {
         if (employee.getId() != null) {
-            throw new IllegalArgumentException("New entity shouldn't contain id");
+            throw new IllegalArgumentException(
+                    "New entity shouldn't contain id");
         }
         return repository.save(employee);
     }
 
     /**
-     * Delete mono.
+     * Deletes {@link Employee} entity from {@link EmployeeRepo} table by @id.
      *
-     * @param id the id
-     * @return the mono
+     * @param id is a primary INT type key of {@link EmployeeRepo} table.
+     * @return {@link Mono<Void>}
      */
     public Mono<Void> delete(final Long id) {
         return repository.deleteById(id);
